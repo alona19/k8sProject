@@ -14,8 +14,15 @@ spec:
       labels:
         app: frontend-app
     spec:
+     volumes:
+        - name: datastore
+          persistentVolumeClaim:
+            claimName: frontend-app-pvc
       containers:
       - name: frontend-app
         image: alonageorge25219/frontend:1.0.1
         ports:
         - containerPort: 80
+        volumeMounts:
+            - mountPath: /var/lib/store
+              name: datastore
