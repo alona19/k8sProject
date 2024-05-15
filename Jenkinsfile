@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -18,6 +17,8 @@ pipeline {
                 script {
                     // Use the Kubernetes credentials to authenticate with GKE
                     withCredentials([kubeconfig(credentialsId: "${KUBE_CREDENTIALS}", disableVersionCheck: true)]) {
+                        // Inside this block, you can perform any Kubernetes-related operations
+                        // For example, you can apply Kubernetes manifests
                         sh "kubectl apply -f deployment.yaml -n ${NAMESPACE}"
                         sh "kubectl apply -f service.yaml -n ${NAMESPACE}"
                     }
@@ -26,4 +27,3 @@ pipeline {
         }
     }
 }
-
