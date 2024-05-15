@@ -19,10 +19,11 @@ pipeline {
                     // Use the Kubernetes credentials to authenticate with GKE
                     withCredentials([kubeconfig(credentialsId: "${KUBE_CREDENTIALS}", disableVersionCheck: true)]) {
                         sh "kubectl apply -f deployment.yaml -n ${NAMESPACE}"
-                        sh "kubectl apply -f frontendService.yaml -n ${NAMESPACE}"
+                        sh "kubectl apply -f service.yaml -n ${NAMESPACE}"
                     }
                 }
             }
         }
     }
 }
+
