@@ -9,19 +9,20 @@ pipeline {
 
     stages {
         stage('Deploy') {
-            environment {
-                // Specify the ID of the Kubernetes credentials configured in Jenkins
-                KUBE_CREDENTIALS = credentials('kubernetes')
-            }
             steps {
                 script {
-                    // Use the Kubernetes credentials to authenticate with GKE
-                    withCredentials([kubeconfig(credentialsId: "${KUBE_CREDENTIALS}", disableVersionCheck: true)]) {
-                        // Inside this block, you can perform any Kubernetes-related operations
-                        // For example, you can apply Kubernetes manifests
-                        sh "kubectl apply -f deployment.yaml -n ${NAMESPACE}"
-                        sh "kubectl apply -f service.yaml -n ${NAMESPACE}"
-                    }
+                    // Define the path to the Kubernetes configuration file
+                    def kubeconfig = "${WORKSPACE}/kubeconfig.yaml"
+
+                    // Write the Kubernetes configuration to the file
+                    writeFile file: kubeconfig, text: credentials('kubernetes')
+
+                    // Set KUBECONFIG environment variable to point to the configuration file
+                    env.KUBECONFIG = kubeconfig
+
+                    // Perform Kubernetes operations using kubectl
+                    sh "kubectl apply -f deployment.yaml -n ${NAMESPACE}"
+                    sh "kubectl apply -f service.yaml -n ${NAMESPACE}"
                 }
             }
         }
