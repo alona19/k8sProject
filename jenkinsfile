@@ -1,26 +1,4 @@
-pipeline {
-    agent any
-    
-    environment {
-        NAMESPACE = 'devops-tools'
-        DEPLOYMENT_NAME = 'frontend-app'
-        SERVICE_NAME = 'frontend-app-service'
-    }
 
-    stages {
-        stage('Deploy') {
-            steps {
-                script {
-                    // Apply the Deployment
-                    sh "kubectl apply -f deployment.yaml -n $NAMESPACE"
-                    
-                    // Apply the Service
-                    sh "kubectl apply -f service.yaml -n $NAMESPACE"
-                }
-            }
-        }
-    }
-}
 pipeline {
     agent any
 
